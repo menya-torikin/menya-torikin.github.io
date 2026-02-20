@@ -10,16 +10,52 @@ const { title, description, pathname, image, jsonld } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <SeoHead title={title} description={description} pathname={pathname} image={image} />
-    {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+    <SeoHead
+      title={title}
+      description={description}
+      pathname={pathname}
+      image={image}
+    />
+    {
+      jsonld && (
+        <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+      )
+    }
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-3LYQVP0WWR"
+      is:inline></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-3LYQVP0WWR");
+    </script>
   </head>
   <body>
     <div class="container">
       <header class="nav">
         <a class="brand" href="/">
-          {settings.logo_url ? <img src={settings.logo_url} alt={settings.site_name} loading="eager" /> : <span class="badge">LOGO</span>}
+          {
+            settings.logo_url ? (
+              <img
+                src={settings.logo_url}
+                alt={settings.site_name}
+                loading="eager"
+              />
+            ) : (
+              <span class="badge">LOGO</span>
+            )
+          }
           <div>
-            <div class="name">{settings.brand_name_zh || settings.site_name}</div>
+            <div class="name">
+              {settings.brand_name_zh || settings.site_name}
+            </div>
             <div class="sub">{settings.brand_name_en || ""}</div>
           </div>
         </a>
