@@ -6,7 +6,7 @@ import { mdToHtml } from "../../lib/md";
 export async function getStaticPaths() {
   return pages.map((p) => ({
     params: { slug: p.slug },
-    props: { page: p }
+    props: { page: p },
   }));
 }
 
@@ -26,5 +26,43 @@ const img = page.og_image || settings.og_default_image;
     {page.description && <p class="p">{page.description}</p>}
     <div class="hr"></div>
     <div class="prose" set:html={mdToHtml(page.body_md)} />
+
+    {
+      page.slug === "contact" &&
+        (settings.contact_email ||
+          settings.facebook_url ||
+          settings.instagram_url) && (
+          <div style="margin-top: 2rem;">
+            <h2>聯絡資訊</h2>
+            <div class="ctaRow">
+              {settings.contact_email && (
+                <a class="btn" href={`mailto:${settings.contact_email}`}>
+                  Email 聯絡
+                </a>
+              )}
+              {settings.facebook_url && (
+                <a
+                  class="btn"
+                  href={settings.facebook_url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Facebook
+                </a>
+              )}
+              {settings.instagram_url && (
+                <a
+                  class="btn"
+                  href={settings.instagram_url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Instagram
+                </a>
+              )}
+            </div>
+          </div>
+        )
+    }
   </section>
 </BaseLayout>
