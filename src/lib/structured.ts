@@ -49,6 +49,8 @@ export function restaurantJsonLd(settings: any, loc: any, withContext = true) {
     "@type": "Restaurant",
     "name": `${settings.brand_name_zh || "麵屋雞金"} ${loc.name || ""}`.trim(),
     "url": url,
+    "servesCuisine": "Ramen",
+    "priceRange": "$$",
     ...(loc.hero_image ? { "image": loc.hero_image } : (settings.og_default_image ? { "image": settings.og_default_image } : {})),
     "address": postalAddress(loc),
     ...(cleanPhone(loc.phone) ? { "telephone": cleanPhone(loc.phone) } : {}),
