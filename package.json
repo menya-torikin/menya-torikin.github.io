@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "astro": "^4.16.18",
-    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/sitemap": "3.2.1",
     "papaparse": "^5.4.1",
     "marked": "^12.0.2"
   }
