@@ -18,19 +18,98 @@ const jsonld = organizationJsonLd(settings, locations);
     <p class="p">目前共有 {locations.length} 間門市。</p>
 
     <div class="grid">
-      {locations.map((loc) => (
-        <a class="card" href={`/locations/${loc.slug}/`}>
-          <h2>{loc.name}</h2>
-          <div class="meta">
-            <div>{loc.address_line}</div>
-            {loc.hours && <div>營業時間：{loc.hours}</div>}
-            {loc.phone && <div>電話：{loc.phone}</div>}
+      {
+        locations.map((loc) => (
+          <div class="card loc-card">
+            <div class="loc-header">
+              <h2>
+                <a href={`/locations/${loc.slug}/`}>{loc.name}</a>
+              </h2>
+              <div class="badge">門市</div>
+            </div>
+            <div class="meta loc-meta">
+              <div class="meta-item">
+                <span class="icon">📍</span> {loc.address_line}
+              </div>
+              {loc.hours && (
+                <div class="meta-item">
+                  <span class="icon">🕒</span> {loc.hours}
+                </div>
+              )}
+              {loc.phone && (
+                <div class="meta-item">
+                  <span class="icon">📞</span> {loc.phone}
+                </div>
+              )}
+            </div>
+            <div class="ctaRow loc-actions">
+              <a class="btn primary" href={`/locations/${loc.slug}/`}>
+                詳細資訊
+              </a>
+              {loc.gmaps_url && (
+                <a
+                  class="btn"
+                  href={loc.gmaps_url}
+                  rel="noopener"
+                  target="_blank"
+                >
+                  Google 地圖
+                </a>
+              )}
+            </div>
           </div>
-          <div class="ctaRow">
-            {loc.gmaps_url && <a class="btn" href={loc.gmaps_url} rel="noopener" target="_blank">Google 地圖</a>}
-          </div>
-        </a>
-      ))}
+        ))
+      }
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .loc-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .loc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .loc-header h2 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.3;
+  }
+  .loc-header h2 a {
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .loc-header h2 a:hover {
+    color: var(--accent);
+  }
+  .loc-meta {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .meta-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .meta-item .icon {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  .loc-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .loc-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+</style>
