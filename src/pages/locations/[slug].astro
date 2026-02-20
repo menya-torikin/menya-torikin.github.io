@@ -7,13 +7,15 @@ import { restaurantJsonLd } from "../../lib/structured";
 export async function getStaticPaths() {
   return locations.map((loc) => ({
     params: { slug: loc.slug },
-    props: { loc }
+    props: { loc },
   }));
 }
 
 const { loc } = Astro.props;
 const title = loc?.name ? `${loc.name}` : "分店";
-const description = loc?.description_md ? loc.description_md : `麵屋雞金 ${loc?.name || ""} 門市資訊。`;
+const description = loc?.description_md
+  ? loc.description_md
+  : `麵屋雞金 ${loc?.name || ""} 門市資訊。`;
 
 const jsonld = restaurantJsonLd(settings, loc, true);
 const img = loc.hero_image || settings.og_default_image;
@@ -41,20 +43,54 @@ const pathname = `/locations/${loc.slug}/`;
           {loc.phone && <div>電話：{loc.phone}</div>}
         </div>
         <div class="ctaRow">
-          {loc.gmaps_url && <a class="btn primary" href={loc.gmaps_url} rel="noopener" target="_blank">Google 地圖導航</a>}
+          {
+            loc.gmaps_url && (
+              <a
+                class="btn primary"
+                href={loc.gmaps_url}
+                rel="noopener"
+                target="_blank"
+              >
+                Google 地圖導航
+              </a>
+            )
+          }
           <a class="btn" href="/locations/">回門市列表</a>
         </div>
+        {
+          loc.gmaps_embed && (
+            <div class="map-embed" set:html={loc.gmaps_embed} />
+          )
+        }
       </div>
 
-      {loc.description_md ? (
-        <div class="card" style="grid-column: span 12;">
-          <h2>介紹</h2>
-          <div class="prose" set:html={mdToHtml(loc.description_md)} />
-        </div>
-      ) : null}
+      {
+        loc.description_md ? (
+          <div class="card" style="grid-column: span 12;">
+            <h2>介紹</h2>
+            <div class="prose" set:html={mdToHtml(loc.description_md)} />
+          </div>
+        ) : null
+      }
     </div>
 
     <div class="hr"></div>
-    <div class="meta">此頁面為靜態產生（build time），可被搜尋引擎直接抓取完整內容。</div>
+    <div class="meta">
+      此頁面為靜態產生（build time），可被搜尋引擎直接抓取完整內容。
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .map-embed {
+    margin-top: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .map-embed :global(iframe) {
+    width: 100% !important;
+    height: 300px !important;
+    border: none;
+    display: block;
+  }
+</style>

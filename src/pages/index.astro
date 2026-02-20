@@ -2,15 +2,20 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { settings, locations, bool, absoluteUrl } from "../lib/data";
 import { mdToHtml } from "../lib/md";
-import { organizationJsonLd, websiteJsonLd, faqPageJsonLd } from "../lib/structured";
+import {
+  organizationJsonLd,
+  websiteJsonLd,
+  faqPageJsonLd,
+} from "../lib/structured";
 
 const locs = locations.slice();
 const primary = locs.find((x) => bool(x.is_primary)) || locs[0];
 
 const faq = (await import("../data/generated/faq.json")).default;
-const homeFaq = faq.filter((x) => (x.page_slug || "").toString().trim() === "home")
-  .sort((a,b) => Number(a.order||0) - Number(b.order||0))
-  .map((x) => ({...x, answer_html: mdToHtml(x.answer_md)}));
+const homeFaq = faq
+  .filter((x) => (x.page_slug || "").toString().trim() === "home")
+  .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
+  .map((x) => ({ ...x, answer_html: mdToHtml(x.answer_md) }));
 
 const org = organizationJsonLd(settings, locs);
 const site = websiteJsonLd(settings);
@@ -19,7 +24,7 @@ const faqLd = homeFaq.length ? faqPageJsonLd(homeFaq, absoluteUrl("/")) : null;
 // Combine multiple JSON-LD objects via @graph
 const jsonld = {
   "@context": "https://schema.org",
-  "@graph": [site, org, ...(faqLd ? [faqLd] : [])]
+  "@graph": [site, org, ...(faqLd ? [faqLd] : [])],
 };
 ---
 
@@ -36,36 +41,45 @@ const jsonld = {
 
     <div class="ctaRow">
       <a class="btn primary" href="/locations/">查看所有門市</a>
-      {primary?.gmaps_url && <a class="btn" href={primary.gmaps_url} rel="noopener" target="_blank">最近門市導航</a>}
+      <a
+        class="btn"
+        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((settings as any).gmaps_search_keyword || settings.brand_name_zh || settings.site_name || "門市")}`}
+        rel="noopener"
+        target="_blank">分店地圖導航</a
+      >
     </div>
 
     <div class="grid">
-      {locs.map((loc) => (
-        <a class="card" href={`/locations/${loc.slug}/`}>
-          <div class="badge">分店</div>
-          <h2>{loc.name}</h2>
-          <div class="meta">
-            <div>{loc.address_line}</div>
-            {loc.hours && <div>營業時間：{loc.hours}</div>}
-            {loc.phone && <div>電話：{loc.phone}</div>}
-          </div>
-        </a>
-      ))}
+      {
+        locs.map((loc) => (
+          <a class="card" href={`/locations/${loc.slug}/`}>
+            <div class="badge">分店</div>
+            <h2>{loc.name}</h2>
+            <div class="meta">
+              <div>{loc.address_line}</div>
+              {loc.hours && <div>營業時間：{loc.hours}</div>}
+              {loc.phone && <div>電話：{loc.phone}</div>}
+            </div>
+          </a>
+        ))
+      }
     </div>
 
-    {homeFaq.length ? (
-      <>
-        <div class="hr"></div>
-        <h2 style="margin:0 0 12px;">常見問題</h2>
-        <div class="grid">
-          {homeFaq.map((x) => (
-            <div class="card" style="grid-column: span 12;">
-              <h3 style="margin:0 0 8px;">{x.question}</h3>
-              <div class="prose" set:html={mdToHtml(x.answer_md)} />
-            </div>
-          ))}
-        </div>
-      </>
-    ) : null}
+    {
+      homeFaq.length ? (
+        <>
+          <div class="hr" />
+          <h2 style="margin:0 0 12px;">常見問題</h2>
+          <div class="grid">
+            {homeFaq.map((x) => (
+              <div class="card" style="grid-column: span 12;">
+                <h3 style="margin:0 0 8px;">{x.question}</h3>
+                <div class="prose" set:html={mdToHtml(x.answer_md)} />
+              </div>
+            ))}
+          </div>
+        </>
+      ) : null
+    }
   </section>
 </BaseLayout>
