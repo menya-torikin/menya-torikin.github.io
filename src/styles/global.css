@@ -23,9 +23,18 @@ a:hover{ text-decoration: underline; }
 .brand .name{ font-weight: 800; letter-spacing:.2px; }
 .brand .sub{ color: var(--muted); font-size: 13px; margin-top:2px; }
 
-.links{ display:flex; gap: 14px; color: var(--muted); font-size: 14px; }
+.links{ display:flex; gap: 14px; color: var(--muted); font-size: 14px; white-space: nowrap; }
 .links a{ padding: 6px 10px; border-radius: 10px; }
 .links a:hover{ background: rgba(255,255,255,.06); text-decoration: none; color: var(--text); }
+
+@media(max-width: 480px){
+  .nav{ gap: 8px; }
+  .brand .name{ font-size: 14px; }
+  .brand .sub{ font-size: 11px; }
+  .brand img{ width: 32px; height: 32px; }
+  .links{ gap: 4px; font-size: 13px; }
+  .links a{ padding: 4px 6px; }
+}
 
 .hero{ padding: 36px 0 12px; }
 .h1{ font-size: 38px; line-height: 1.1; margin: 0 0 14px; }
