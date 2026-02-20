@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { settings, locations, bool, absoluteUrl } from "../lib/data";
+import { settings, locations, absoluteUrl } from "../lib/data";
 import { mdToHtml } from "../lib/md";
 import {
   organizationJsonLd,
@@ -9,7 +9,6 @@ import {
 } from "../lib/structured";
 
 const locs = locations.slice();
-const primary = locs.find((x) => bool(x.is_primary)) || locs[0];
 
 const faq = (await import("../data/generated/faq.json")).default;
 const homeFaq = faq
