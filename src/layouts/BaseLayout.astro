@@ -1,0 +1,43 @@
+---
+import "../styles/global.css";
+import SeoHead from "../components/SeoHead.astro";
+import { settings } from "../lib/data";
+
+const { title, description, pathname, image, jsonld } = Astro.props;
+---
+
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SeoHead title={title} description={description} pathname={pathname} image={image} />
+    {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
+  </head>
+  <body>
+    <div class="container">
+      <header class="nav">
+        <a class="brand" href="/">
+          {settings.logo_url ? <img src={settings.logo_url} alt={settings.site_name} loading="eager" /> : <span class="badge">LOGO</span>}
+          <div>
+            <div class="name">{settings.brand_name_zh || settings.site_name}</div>
+            <div class="sub">{settings.brand_name_en || ""}</div>
+          </div>
+        </a>
+        <nav class="links">
+          <a href="/locations/">門市</a>
+          <a href="/p/about/">關於</a>
+          <a href="/p/contact/">聯絡</a>
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <div class="hr"></div>
+      <footer class="footer">
+        <div>{settings.site_name} · {new Date().getFullYear()}</div>
+      </footer>
+    </div>
+  </body>
+</html>

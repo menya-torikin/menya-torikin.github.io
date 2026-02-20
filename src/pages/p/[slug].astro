@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { settings, pages, absoluteUrl } from "../../lib/data";
+import { mdToHtml } from "../../lib/md";
+
+export async function getStaticPaths() {
+  return pages.map((p) => ({
+    params: { slug: p.slug },
+    props: { page: p }
+  }));
+}
+
+const { page } = Astro.props;
+const pathname = `/p/${page.slug}/`;
+const img = page.og_image || settings.og_default_image;
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  pathname={pathname}
+  image={img}
+>
+  <section class="hero">
+    <h1 class="h1">{page.title}</h1>
+    {page.description && <p class="p">{page.description}</p>}
+    <div class="hr"></div>
+    <div class="prose" set:html={mdToHtml(page.body_md)} />
+  </section>
+</BaseLayout>

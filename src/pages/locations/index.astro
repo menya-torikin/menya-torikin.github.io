@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { settings, locations } from "../../lib/data";
+import { organizationJsonLd } from "../../lib/structured";
+
+const jsonld = organizationJsonLd(settings, locations);
+---
+
+<BaseLayout
+  title="門市據點"
+  description="麵屋雞金門市據點與導航資訊。"
+  pathname="/locations/"
+  image={settings.og_default_image}
+  jsonld={jsonld}
+>
+  <section class="hero">
+    <h1 class="h1">門市據點</h1>
+    <p class="p">目前共有 {locations.length} 間門市。</p>
+
+    <div class="grid">
+      {locations.map((loc) => (
+        <a class="card" href={`/locations/${loc.slug}/`}>
+          <h2>{loc.name}</h2>
+          <div class="meta">
+            <div>{loc.address_line}</div>
+            {loc.hours && <div>營業時間：{loc.hours}</div>}
+            {loc.phone && <div>電話：{loc.phone}</div>}
+          </div>
+          <div class="ctaRow">
+            {loc.gmaps_url && <a class="btn" href={loc.gmaps_url} rel="noopener" target="_blank">Google 地圖</a>}
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

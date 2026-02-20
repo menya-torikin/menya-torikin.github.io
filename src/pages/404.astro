@@ -1,0 +1,14 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { settings } from "../lib/data";
+---
+<BaseLayout title="找不到頁面" description="此頁面不存在。" pathname="/404/" image={settings.og_default_image}>
+  <section class="hero">
+    <h1 class="h1">404</h1>
+    <p class="p">找不到這個頁面。你可以回到首頁或門市列表。</p>
+    <div class="ctaRow">
+      <a class="btn primary" href="/">回首頁</a>
+      <a class="btn" href="/locations/">門市列表</a>
+    </div>
+  </section>
+</BaseLayout>

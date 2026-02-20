@@ -1,0 +1,36 @@
+---
+import { settings, absoluteUrl } from "../lib/data";
+
+const {
+  title,
+  description,
+  pathname,
+  image,
+  noindex = false
+} = Astro.props;
+
+const url = absoluteUrl(pathname || Astro.url.pathname);
+const pageTitle = title ? `${title}｜${settings.site_name}` : (settings.default_title || settings.site_name);
+const pageDesc = description || settings.default_description || "";
+const ogImage = image || settings.og_default_image || "";
+const canonical = url;
+---
+
+<title>{pageTitle}</title>
+{pageDesc && <meta name="description" content={pageDesc} />}
+<link rel="canonical" href={canonical} />
+
+{noindex && <meta name="robots" content="noindex,nofollow" />}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={settings.site_name} />
+<meta property="og:locale" content={settings.locale || "zh_TW"} />
+<meta property="og:title" content={pageTitle} />
+{pageDesc && <meta property="og:description" content={pageDesc} />}
+<meta property="og:url" content={canonical} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+{pageDesc && <meta name="twitter:description" content={pageDesc} />}
+{ogImage && <meta name="twitter:image" content={ogImage} />}
