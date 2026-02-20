@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { settings, onlineShops, bool } from "../lib/data";
+
+const activeShops = onlineShops
+    .filter((x) => bool(x.is_active))
+    .sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
+---
+
+<BaseLayout
+    title={`線上購物 | ${settings.default_title || settings.site_name}`}
+    description={`探索 ${settings.brand_name_zh || settings.site_name} 的線上購物平台。`}
+    pathname="/shop/"
+    image={settings.og_default_image}
+>
+    <section class="hero">
+        <h1 class="h1">線上購物</h1>
+        <p class="p">
+            將雞白湯的美味帶回家！您可以透過以下平台選購我們的冷凍料理包與獨家商品。
+        </p>
+
+        {
+            activeShops.length > 0 ? (
+                <div class="grid" style="margin-top: 2rem;">
+                    {activeShops.map((shop) => (
+                        <div
+                            class="card"
+                            style="display: flex; flex-direction: column;"
+                        >
+                            <h2 style="margin-bottom: 0.5rem;">{shop.name}</h2>
+                            {shop.description && (
+                                <p style="color: var(--text-muted); flex-grow: 1;">
+                                    {shop.description}
+                                </p>
+                            )}
+                            <a
+                                class="btn primary"
+                                href={shop.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style="margin-top: 1rem; text-align: center; display: block;"
+                            >
+                                {shop.button_text || "前往購買"}
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <div style="margin-top: 2rem; padding: 2rem; text-align: center; background: var(--bg-card); border-radius: 8px;">
+                    <p>目前尚未開放線上購物，敬請期待！</p>
+                </div>
+            )
+        }
+    </section>
+</BaseLayout>

@@ -2,8 +2,9 @@ import settings from "../data/generated/settings.json";
 import locations from "../data/generated/locations.json";
 import pages from "../data/generated/pages.json";
 import faq from "../data/generated/faq.json";
+import onlineShops from "../data/generated/online_shops.json";
 
-export { settings, locations, pages, faq };
+export { settings, locations, pages, faq, onlineShops };
 
 export function bool(v: unknown): boolean {
   const s = (v ?? "").toString().trim().toLowerCase();
